@@ -29,7 +29,16 @@ function renderTopics(){
 }
 document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');fmt=b.dataset.format;cards()});
 [lang,age,search].forEach(x=>x.addEventListener('input',()=>{if(x===search)topicFilter='';cards()}));
-document.getElementById('searchBtn').onclick=()=>{topicFilter='';document.getElementById('resources').scrollIntoView({behavior:'smooth'});cards()};
+document.getElementById('searchBtn').onclick=()=>{
+  topicFilter='';
+  age.value='all';
+  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));
+  const allFormat=document.querySelector('button[data-format="all"]');
+  if(allFormat)allFormat.classList.add('active');
+  fmt='all';
+  document.getElementById('resources').scrollIntoView({behavior:'smooth'});
+  cards();
+};
 lang.addEventListener('change',renderTopics);
 const menu=document.getElementById('menu'),nav=document.querySelector('.topbar nav');
 if(menu&&nav){menu.setAttribute('aria-expanded','false');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu')};nav.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu')})}
