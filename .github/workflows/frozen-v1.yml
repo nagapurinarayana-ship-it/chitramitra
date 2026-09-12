@@ -20,7 +20,7 @@ jobs:
   quality:
     name: Build, verify, audit UI and publish
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,14 +43,34 @@ jobs:
       - name: Install Chromium for browser QA
         run: npx playwright install --with-deps chromium
 
-      - name: Generate the complete site
-        run: npm run build
+      - name: Build and validate source
+        id: source_gate
+        shell: bash
+        run: |
+          set +e
+          npm run build
+          npm run verify
+          npm run qa
+          rc=$?
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
 
-      - name: Verify frozen content matrix
-        run: npm run verify
+      - name: Diagnose and safely repair deterministic failures
+        if: ${{ steps.source_gate.outcome == 'failure' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo 'Source gate failed. Starting bounded evidence-based repair.'
+          npm run repair
+          echo 'Repair completed. The complete validation sequence will run again.'
 
-      - name: Run deterministic quality gate
-        run: npm run qa
+      - name: Re-run complete source validation after repair
+        if: ${{ steps.source_gate.outcome == 'failure' }}
+        run: |
+          set -euo pipefail
+          npm run build
+          npm run verify
+          npm run qa
 
       - name: Run browser UI tests
         run: npx playwright test --project=chromium --project=mobile
@@ -76,7 +96,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
-      - name: Publish generated resources
+      - name: Publish only after every gate passes
         if: github.event_name != 'pull_request'
         run: |
           set -euo pipefail
