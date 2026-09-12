@@ -25,7 +25,9 @@ for(const l of langs)for(const [t] of topics)for(const f of formats){
     for(const needle of ['<title>','canonical','application/ld+json','window.print'])if(!x.includes(needle))throw new Error(`${p} missing ${needle}`);
     if(x.includes('children ages 3–8'))throw new Error(`${p} has stale age range`);
     const expected=contentFor(t).visual;
-    if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
+    if(t==='festivals'&&f==='colouring'){
+      if(!x.includes('festival-colouring'))badVisual.push(`${l}/${t}/${f}`);
+    }else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
   }
 }
 if(missing.length)throw new Error(`Missing ${missing.length} resources`);
