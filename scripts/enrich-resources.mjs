@@ -40,6 +40,8 @@ function svgFor(topic,words){
   return `<svg viewBox="0 0 700 235" role="img" aria-label="${esc(topic)} printable practice art">${body}<g fill="currentColor" font-family="system-ui,sans-serif" font-size="23" text-anchor="middle"><text x="130" y="220">${labels[0]||''}</text><text x="350" y="220">${labels[1]||''}</text><text x="570" y="220">${labels[2]||''}</text></g></svg>`;
 }
 
+const STYLE='<style>.enhanced-category{margin:24px 0;padding:22px;border:2px solid currentColor;border-radius:18px;background:transparent;break-inside:avoid}.enhanced-category h2{margin:0 0 14px;font-size:1.25rem}.enhanced-art{padding:8px;border:1px dashed currentColor;border-radius:14px}.enhanced-art svg{display:block;width:100%;height:auto}.enhanced-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.enhanced-cards article{padding:12px;border:1px solid currentColor;border-radius:12px;min-height:58px}.enhanced-cards b,.enhanced-cards span{display:block}.enhanced-cards span{margin-top:5px}.enhanced-tip{font-size:.9rem;margin:14px 0}.drawbox{height:90px;border:2px dashed currentColor;border-radius:12px;margin-top:12px}@media print{.enhanced-category{border:1.5px solid #000}.enhanced-cards{grid-template-columns:repeat(2,1fr)}.drawbox{height:110px}}@media(max-width:600px){.enhanced-cards{grid-template-columns:1fr}}</style>';
+
 const files=[];
 function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,e.name);if(e.isDirectory())walk(p);else if(e.name.endsWith('.html'))files.push(p)}}
 walk(ROOT);
@@ -61,7 +63,7 @@ for(const file of files){
     [c.create,c.createText],
     [c.challenge,c.challengeText]
   ];
-  const panel=`<section class="enhanced-category" data-enhanced-category="${topic}"><h2>${esc(c.title)}</h2><div class="enhanced-art">${svgFor(topic,words)}</div><div class="enhanced-cards">${cards.map(([h,t],i)=>`<article><b>${i+1}. ${esc(h)}</b><span>${esc(t)}</span></article>`).join('')}</div><p class="enhanced-tip">${esc(c.tip)}</p><div class="drawbox" aria-label="printable drawing space"></div></section>`;
+  const panel=`${STYLE}<section class="enhanced-category" data-enhanced-category="${topic}"><h2>${esc(c.title)}</h2><div class="enhanced-art">${svgFor(topic,words)}</div><div class="enhanced-cards">${cards.map(([h,t],i)=>`<article><b>${i+1}. ${esc(h)}</b><span>${esc(t)}</span></article>`).join('')}</div><p class="enhanced-tip">${esc(c.tip)}</p><div class="drawbox" aria-label="printable drawing space"></div></section>`;
   html=html.replace('<section class="resource-info">',`${panel}<section class="resource-info">`);
   fs.writeFileSync(file,html);
 }
