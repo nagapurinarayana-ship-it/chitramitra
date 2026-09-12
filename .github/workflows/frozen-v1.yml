@@ -48,10 +48,13 @@ jobs:
         shell: bash
         run: |
           set +e
-          npm run build
-          npm run verify
-          npm run qa
-          rc=$?
+          rc=0
+          echo '=== BUILD ==='
+          npm run build || rc=1
+          echo '=== VERIFY ==='
+          npm run verify || rc=1
+          echo '=== QUALITY GATE ==='
+          npm run qa || rc=1
           echo "rc=$rc" >> "$GITHUB_OUTPUT"
           exit $rc
 
