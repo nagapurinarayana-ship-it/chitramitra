@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://worthgo.pages.dev/sitemap.xml
+Sitemap: https://chitramitra.pages.dev/sitemap.xml
