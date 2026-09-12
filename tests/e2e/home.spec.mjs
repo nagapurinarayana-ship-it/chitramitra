@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('homepage controls work', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/ChitraMitra/);
-  await expect(page.locator('#grid .resource-card')).toHaveCount(20);
+  await expect(page.locator('#grid .resource-card')).toHaveCount(80);
 
   await page.locator('#language').selectOption('te');
   await expect(page.locator('#topicList a').first()).not.toHaveText('Alphabet');
