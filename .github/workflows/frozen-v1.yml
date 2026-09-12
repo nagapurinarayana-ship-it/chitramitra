@@ -1,0 +1,66 @@
+name: ChitraMitra Frozen V1 — Build, Verify & Publish
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '15 3 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: chitramitra-v1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frozen-v1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate all frozen V1 resources
+        run: node scripts/generate-site.mjs
+      - name: Verify frozen V1 matrix and SEO
+        run: node scripts/verify.mjs
+      - name: Accessibility and safety baseline
+        shell: bash
+        run: |
+          test -f robots.txt
+          test -f sitemap.xml
+          grep -q 'lang="en"' index.html
+          grep -q 'aria-label="Search resources"' index.html
+          ! grep -RniE 'child.*(photo|date of birth)|password|credit card' index.html app.js data.js resources/index.html
+      - name: Commit generated site
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --cached --quiet; then
+            echo 'No generated changes to publish.'
+            exit 0
+          fi
+          git commit -m 'chore: build frozen ChitraMitra V1 resources [auto]'
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if git push origin HEAD:main; then
+              echo "Published successfully on attempt ${attempt}."
+              exit 0
+            fi
+            echo "Push attempt ${attempt} failed; rebasing onto latest main."
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort || true; git reset --hard origin/main; node scripts/generate-site.mjs; node scripts/verify.mjs; git add .; git commit -m 'chore: rebuild frozen ChitraMitra V1 [auto]' || true; }
+            sleep $((attempt * 2))
+          done
+          echo 'Unable to publish to main after 10 attempts.'
+          exit 1
