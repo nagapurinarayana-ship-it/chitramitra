@@ -7,6 +7,7 @@
     "build": "node scripts/generate-site.mjs",
     "verify": "node scripts/verify.mjs",
     "qa": "node scripts/quality-gate.mjs",
+    "repair": "node scripts/repair.mjs",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
