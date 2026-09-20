@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/generate-site.mjs && node scripts/enrich-resources.mjs",
+    "build": "node scripts/generate-site.mjs && node scripts/enrich-resources.mjs && node scripts/generate-learning-pages.mjs",
     "verify": "node scripts/verify.mjs",
     "qa": "node scripts/quality-gate.mjs",
     "repair": "node scripts/repair.mjs",
