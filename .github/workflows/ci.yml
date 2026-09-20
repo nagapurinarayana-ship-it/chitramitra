@@ -54,6 +54,7 @@ jobs:
           test -f robots.txt
           test -d resources
           test -d learn
+          test -f health.txt
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v6
@@ -77,7 +78,32 @@ jobs:
     name: Production Gate
     needs: build-quality-e2e
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 25
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Production gate passed
-        run: echo "ChitraMitra production gate passed: build, matrix, quality and browser smoke are green."
+      - name: Wait for Cloudflare production deployment
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          set -e
+          for attempt in {1..120}; do
+            body="$(curl -fsS --max-time 10 https://chitramitra.pages.dev/health.txt || true)"
+            echo "$body"
+            if echo "$body" | grep -q "chitramitra-build=$EXPECTED_SHA"; then
+              echo "Production is serving the expected commit: $EXPECTED_SHA"
+              exit 0
+            fi
+            echo "Waiting for production deployment (attempt $attempt/120)..."
+            sleep 10
+          done
+          echo "Production did not serve the expected commit within 20 minutes."
+          exit 1
+
+      - name: Production smoke checks
+        run: |
+          set -e
+          for url in             "https://chitramitra.pages.dev/"             "https://chitramitra.pages.dev/resources/en/numbers/worksheet.html"             "https://chitramitra.pages.dev/learn/en/numbers/5/"             "https://chitramitra.pages.dev/learn/te/alphabet/item-01/"             "https://chitramitra.pages.dev/sitemap.xml"             "https://chitramitra.pages.dev/robots.txt"; do
+            echo "Checking $url"
+            curl -fsSL --max-time 20 "$url" >/dev/null
+          done
+          echo "Production smoke checks passed."
