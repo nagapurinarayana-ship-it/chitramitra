@@ -210,6 +210,6 @@ export function contentFor(topicId,lang='en'){
     return {visual:visuals[topicId],examples:a.examples,groups:script.groups,title:script.title,skill:script.skill};
   }
   const item=V[lang]?.[topicId]||BASE[topicId];
-  if(!item) throw new Error(\`Missing source content definition for topic: \${topicId}\`);
+  if(!item) throw new Error(`Missing source content definition for topic: ${topicId}`);
   return {visual:visuals[topicId],examples:expandedContent(topicId,lang),skill:item[3]};
 }
