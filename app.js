@@ -1,46 +1,22 @@
 (function(){
 const D=window.CHITRAMITRA;
-const grid=document.getElementById('grid'),lang=document.getElementById('language'),age=document.getElementById('age'),search=document.getElementById('search'),count=document.getElementById('count');
-let fmt='all',topicFilter='';
-function cards(){
-  const q=search.value.trim().toLowerCase(),l=lang.value,a=age.value;
-  let rows=[];
-  D.topics.forEach(([id,n],ti)=>Object.keys(D.formats).forEach((f,fi)=>{
-    const resourceAge=D.ages[(ti+fi)%D.ages.length];
-    if(a!=='all'&&resourceAge!==a)return;
-    if(fmt!=='all'&&f!==fmt)return;
-    if(topicFilter&&id!==topicFilter)return;
-    if(q&&!([id,n.en,n.te,n.hi,n.ta,n.kn,n.ml,D.formats[f].en,D.formats[f].label[l]].join(' ').toLowerCase().includes(q)))return;
-    rows.push({id,n,f,age:resourceAge});
-  }));
-  count.textContent=`${rows.length} resources`;
-  grid.innerHTML=rows.slice(0,80).map(x=>{
-    const title=x.n[l]+' — '+D.formats[x.f].label[l];
-    const url=`resources/${l}/${x.id}/${x.f}.html`;
-    return `<article class="resource-card"><span class="tag">${D.formats[x.f].label[l]}</span><h3>${title}</h3><p>Printable ${D.formats[x.f].en.toLowerCase()} for children, available in English and Indian languages.</p><div class="meta"><span>${D.languages[l].native}</span><span>${x.age}</span></div><a href="${url}">Preview & print →</a></article>`;
-  }).join('')||'<p>No resources match those choices yet.</p>';
+const grid=document.getElementById("topicList"),lang=document.getElementById("language"),age=document.getElementById("age"),search=document.getElementById("search"),count=document.getElementById("count");
+function render(){
+ const q=search.value.trim().toLowerCase(),l=lang.value,a=age.value;
+ const rows=D.topics.filter(function(x,ti){
+  const id=x[0],n=x[1], ageFor=D.ages[ti%D.ages.length]||"3-4";
+  if(a!=="all"&&ageFor!==a)return false;
+  return !q||[id,n.en,n.te,n.hi,n.ta,n.kn,n.ml].join(" ").toLowerCase().includes(q);
+ });
+ count.textContent=rows.length+" learning topics";
+ grid.innerHTML=rows.map(function(x,ti){
+  const id=x[0],name=x[1][l],ageFor=D.ages[D.topics.findIndex(y=>y[0]===id)%D.ages.length]||"3-4";
+  const icons={alphabet:"🔤",numbers:"🔢",shapes:"🔷",colours:"🎨",patterns:"🧩",animals:"🐘",birds:"🐦",fruits:"🍎",vegetables:"🥕","body-parts":"🙂",family:"👨‍👩‍👧",food:"🍚",vehicles:"🚌",school:"🎒","community-helpers":"🧑‍🚒",nature:"🌿",festivals:"🪔",india:"🇮🇳",plants:"🌱","farm-agriculture":"🌾"};
+  return '<a class="home-topic-card" href="learn/'+l+'/'+id+'/"><span class="topic-icon">'+(icons[id]||"✨")+'</span><span class="topic-name">'+name+'</span><span class="topic-meta">'+ageFor+' · Individual activities</span><span class="topic-cta">Explore →</span></a>';
+ }).join("")||"<p>No topic matches that search.</p>";
 }
-function renderTopics(){
-  const tl=document.getElementById('topicList');
-  tl.innerHTML=D.topics.map(([id,n])=>`<a href="#resources" data-topic="${id}">${n[lang.value]}</a>`).join('');
-  tl.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{
-    e.preventDefault(); topicFilter=a.dataset.topic; search.value=''; cards(); document.getElementById('resources').scrollIntoView({behavior:'smooth'});
-  }));
-}
-document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');fmt=b.dataset.format;cards()});
-[lang,age,search].forEach(x=>x.addEventListener('input',()=>{if(x===search)topicFilter='';cards()}));
-document.getElementById('searchBtn').onclick=()=>{
-  topicFilter='';
-  age.value='all';
-  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));
-  const allFormat=document.querySelector('button[data-format="all"]');
-  if(allFormat)allFormat.classList.add('active');
-  fmt='all';
-  document.getElementById('resources').scrollIntoView({behavior:'smooth'});
-  cards();
-};
-lang.addEventListener('change',renderTopics);
-const menu=document.getElementById('menu'),nav=document.querySelector('.topbar nav');
-if(menu&&nav){menu.setAttribute('aria-expanded','false');menu.onclick=()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu')};nav.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu')})}
-renderTopics();cards();
+[lang,age,search].forEach(function(x){x.addEventListener("input",render);x.addEventListener("change",render)});
+const menu=document.getElementById("menu"),nav=document.querySelector(".topbar nav");
+if(menu&&nav){menu.setAttribute("aria-expanded","false");menu.onclick=function(){const open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open))};nav.addEventListener("click",function(){nav.classList.remove("open");menu.setAttribute("aria-expanded","false")})}
+render();
 })();
