@@ -11,7 +11,7 @@ const D=box.window.CHITRAMITRA;
 const langs=Object.keys(D.languages),topics=D.topics,formats=Object.keys(D.formats);
 if(langs.length!==6||topics.length!==20||formats.length!==5)throw new Error(`Frozen matrix mismatch: ${langs.length}x${topics.length}x${formats.length}`);
 if(!D.languages.en||D.languages.en.native!=='English')throw new Error('English language definition missing');
-for(const [id,n] of topics){if(!n.en)throw new Error(`English topic missing: ${id}`);const c=contentFor(id);if(id==='alphabet'&&!c.groups)throw new Error('Alphabet source must contain native character groups')}
+for(const [id,n] of topics){if(!n.en)throw new Error(`English topic missing: ${id}`);const c=contentFor(id);if(id==='alphabet'&&!c.groups)throw new Error('Alphabet source must contain native character groups');if(id!=='alphabet'&&c.examples.length<12)throw new Error(`Topic ${id} needs at least 12 learning items`)}
 for(const f of formats){if(!D.formats[f].label.en)throw new Error(`English format label missing: ${f}`)}
 if(!D.ui.en)throw new Error('English UI strings missing');
 
