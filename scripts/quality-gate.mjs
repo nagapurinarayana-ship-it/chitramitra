@@ -8,7 +8,7 @@ must(index.includes('id="language"')&&index.includes('id="age"')&&index.includes
 for(const [t] of D.topics){const c=contentFor(t);must(t==='alphabet'?c.examples.length===26:c.examples.length>=12,`Topic ${t} must contain at least 12 learning items`);must(c.skill.length>20,`Topic ${t} has insufficient learning objective content`)}
 for(const l of langs){
   const a=contentFor('alphabet',l);
-  for(const [group,chars] of Object.entries(a.groups))must(chars.length>0,\`Alphabet group \${l}/\${group} is empty\`);
+  for(const [group,chars] of Object.entries(a.groups))must(chars.length>0,`Alphabet group ${l}/${group} is empty`);
   if(l==='en')must(a.groups.letters.length===26,'English alphabet must contain 26 letters');
   if(l==='ta')must(a.groups['உயிர்மெய் சேர்க்கைகள்'].length===216,'Tamil uyirmei matrix must contain 216 combinations');
   if(l==='te'){const n=a.groups['హల్లులు'].length;must(n>0,'Telugu consonant set is empty');must(a.groups['గుణింతాలు (క్రమబద్ధమైన అభ్యాసం)'].length===n*13,'Telugu gunintalu matrix is incomplete');must(a.groups['అనుస్వార-విసర్గ అభ్యాసం'].length===n*2,'Telugu anusvara-visarga matrix is incomplete')}
