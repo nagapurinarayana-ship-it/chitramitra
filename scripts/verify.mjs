@@ -36,10 +36,7 @@ for(const l of langs)for(const [t] of topics)for(const f of formats){
 if(missing.length)throw new Error(`Missing ${missing.length} resources`);
 if(badVisual.length)throw new Error(`Topic content mismatch in ${badVisual.length} resources; first: ${badVisual.slice(0,5).join(', ')}`);
 
-const sitemap=fs.readFileSync(path.join(root,'sitemap.xml'),'utf8');
-const count=(sitemap.match(/<url>/g)||[]).length;
-if(count<601)throw new Error(`Expected at least 601 sitemap URLs, got ${count}`);
-const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const learnRoot=path.join(root,'learn');if(!fs.existsSync(learnRoot))throw new Error('Individual learning pages directory missing');let topicPages=0,itemPages=0;for(const l of langs)for(const [t] of topics){const dir=path.join(learnRoot,l,t);if(!fs.existsSync(path.join(dir,'index.html')))throw new Error(`Missing individual topic page: ${dir}/index.html`);topicPages++;for(const e of fs.readdirSync(dir,{withFileTypes:true})){if(!e.isDirectory())continue;const p=path.join(dir,e.name,'index.html');if(!fs.existsSync(p))throw new Error(`Missing individual item page: ${p}`);itemPages++}}if(topicPages!==120||itemPages<1)throw new Error(`Learning coverage mismatch: ${topicPages} topic pages, ${itemPages} item pages`);const sitemap=fs.readFileSync(path.join(root,'sitemap.xml'),'utf8');const count=(sitemap.match(/<url>/g)||[]).length;if(count<721)throw new Error(`Expected expanded sitemap with learning URLs, got ${count}`);const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 if(/WorthGo/i.test(index))throw new Error('Old branding remains on homepage');
 if(!fs.readFileSync(path.join(root,'resource.css'),'utf8').includes('@page{size:A4'))throw new Error('A4 print CSS missing');
 const learnRoot=path.join(root,'learn');if(!fs.existsSync(learnRoot))throw new Error('Individual learning pages directory missing');for(const l of langs)for(const [t] of topics){const p=path.join(learnRoot,l,t,'index.html');if(!fs.existsSync(p))throw new Error(`Missing individual topic page: ${p}`)}console.log('Verification passed: frozen 600-resource matrix plus individual learning architecture is present.');
