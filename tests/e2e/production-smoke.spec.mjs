@@ -9,7 +9,7 @@ test('homepage exposes child-first discovery', async ({ page }) => {
 });
 
 test('individual Telugu learning item is printable', async ({ page }) => {
-  await page.goto('/learn/te/alphabet/a/');
+  await page.goto('/learn/te/alphabet/item-01/');
   await expect(page).toHaveTitle(/ChitraMitra/i);
   await expect(page.locator('.learn-hero')).toBeVisible();
   await expect(page.locator('.learn-print')).toBeVisible();
