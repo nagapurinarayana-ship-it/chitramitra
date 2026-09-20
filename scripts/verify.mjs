@@ -38,8 +38,8 @@ if(badVisual.length)throw new Error(`Topic content mismatch in ${badVisual.lengt
 
 const sitemap=fs.readFileSync(path.join(root,'sitemap.xml'),'utf8');
 const count=(sitemap.match(/<url>/g)||[]).length;
-if(count!==601)throw new Error(`Expected 601 sitemap URLs, got ${count}`);
+if(count<601)throw new Error(`Expected at least 601 sitemap URLs, got ${count}`);
 const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 if(/WorthGo/i.test(index))throw new Error('Old branding remains on homepage');
 if(!fs.readFileSync(path.join(root,'resource.css'),'utf8').includes('@page{size:A4'))throw new Error('A4 print CSS missing');
-console.log('Frozen V1 content verification passed: 6 languages × 20 topics × 5 formats = 600 resources; topic-specific visual content verified from content-model source of truth; English included.');
+const learnRoot=path.join(root,'learn');if(!fs.existsSync(learnRoot))throw new Error('Individual learning pages directory missing');for(const l of langs)for(const [t] of topics){const p=path.join(learnRoot,l,t,'index.html');if(!fs.existsSync(p))throw new Error(`Missing individual topic page: ${p}`)}console.log('Verification passed: frozen 600-resource matrix plus individual learning architecture is present.');
