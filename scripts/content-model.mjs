@@ -36,12 +36,25 @@ const ALPHABET = {
   kn:{examples:['A — Apple (ಸೇಬು)','B — Ball (ಚೆಂಡು)','C — Cat (ಬೆಕ್ಕು)','D — Dog (ನಾಯಿ)','E — Elephant (ಆನೆ)','F — Fish (ಮೀನು)','G — Grapes (ದ್ರಾಕ್ಷಿ)','H — Hat (ಟೋಪಿ)','I — Ice cream (ಐಸ್ ಕ್ರೀಮ್)','J — Juice (ರಸ)','K — Kite (ಗಾಳಿಪಟ)','L — Lion (ಸಿಂಹ)','M — Mango (ಮಾವು)','N — Nest (ಗೂಡು)','O — Orange (ಕಿತ್ತಳೆ)','P — Parrot (ಗಿಳಿ)','Q — Queen (ರಾಣಿ)','R — Rabbit (ಮೊಲ)','S — Sun (ಸೂರ್ಯ)','T — Tiger (ಹುಲಿ)','U — Umbrella (ಛತ್ರಿ)','V — Van (ವ್ಯಾನ್)','W — Watch (ಗಡಿಯಾರ)','X — Xylophone (ಕ್ಸೈಲೋಫೋನ್)','Y — Yak (ಯಾಕ್)','Z — Zebra (ಜೀಬ್ರಾ)'],skill:'A ರಿಂದ Z ವರೆಗೆ ಎಲ್ಲಾ 26 ಇಂಗ್ಲಿಷ್ ಅಕ್ಷರಗಳನ್ನು ಗುರುತಿಸಿ ಪ್ರತಿಯೊಂದು ಅಕ್ಷರವನ್ನು ಪರಿಚಿತ ಪದದೊಂದಿಗೆ ಜೋಡಿಸುವುದು'},
   ml:{examples:['A — Apple (ആപ്പിൾ)','B — Ball (പന്ത്)','C — Cat (പൂച്ച)','D — Dog (നായ)','E — Elephant (ആന)','F — Fish (മീൻ)','G — Grapes (മുന്തിരി)','H — Hat (തൊപ്പി)','I — Ice cream (ഐസ്‌ക്രീം)','J — Juice (ജ്യൂസ്)','K — Kite (പട്ടം)','L — Lion (സിംഹം)','M — Mango (മാങ്ങ)','N — Nest (കൂട്)','O — Orange (ഓറഞ്ച്)','P — Parrot (തത്ത)','Q — Queen (രാജ്ഞി)','R — Rabbit (മുയൽ)','S — Sun (സൂര്യൻ)','T — Tiger (കടുവ)','U — Umbrella (കുട)','V — Van (വാൻ)','W — Watch (വാച്ച്)','X — Xylophone (സൈലോഫോൺ)','Y — Yak (യാക്ക്)','Z — Zebra (സീബ്ര)'],skill:'A മുതൽ Z വരെ 26 ഇംഗ്ലീഷ് അക്ഷരങ്ങളും തിരിച്ചറിഞ്ഞ് ഓരോ അക്ഷരവും പരിചിതമായ വാക്കുമായി ബന്ധിപ്പിക്കുക'}
 };
+const SCRIPT_ALPHABETS={
+ en:{title:'English Alphabet',groups:{letters:'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.split(' '),name:'A–Z letters'},skill:'recognise and practise all 26 English letters from A to Z'},
+ te:{title:'తెలుగు అక్షరమాల',groups:{అచ్చులు:'అ ఆ ఇ ఈ ఉ ఊ ఋ ఎ ఏ ఐ ఒ ఓ ఔ అం అః'.split(' '),హల్లులు:'క ఖ గ ఘ ఙ చ ఛ జ ఝ ఞ ట ఠ డ ఢ ణ త థ ద ధ న ప ఫ బ భ మ య ర ల వ శ ష స హ ళ'.split(' '),ప్రత్యేక_అక్షరాలు:'క్ష ఱ'.split(' ')},skill:'తెలుగు అచ్చులు, హల్లులు మరియు సాధారణంగా బోధించే ప్రత్యేక అక్షరాలను గుర్తించి రాయడం'},
+ hi:{title:'हिन्दी वर्णमाला',groups:{स्वर:'अ आ इ ई उ ऊ ऋ ए ऐ ओ औ अं अः'.split(' '),व्यंजन:'क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ल व श ष स ह'.split(' '),संयुक्त_अक्षर:'क्ष त्र ज्ञ श्र'.split(' ')},skill:'हिन्दी के स्वर, व्यंजन और सामान्य संयुक्त अक्षरों को पहचानना और लिखना'},
+ ta:{title:'தமிழ் எழுத்துக்கள்',groups:{உயிரெழுத்துகள்:'அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ'.split(' '),மெய்யெழுத்துகள்:'க் ங் ச் ஞ் ட் ண் த் ந் ப் ம் ய் ர் ல் வ் ழ் ள் ற் ன்'.split(' '),ஆய்தம்:['ஃ'],உயிர்மெய்:'க ச ட த ப ற'.split(' ')},skill:'தமிழ் உயிர், மெய், ஆய்த எழுத்துகளை அடையாளம் கண்டு எழுதுதல்; உயிர்மெய் சேர்க்கைகளைப் பயிற்சி செய்தல்'},
+ kn:{title:'ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ',groups:{ಸ್ವರಗಳು:'ಅ ಆ ಇ ಈ ಉ ಊ ಋ ಎ ಏ ಐ ಒ ಓ ಔ ಅಂ ಅಃ'.split(' '),ವ್ಯಂಜನಗಳು:'ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಲ ವ ಶ ಷ ಸ ಹ ಳ'.split(' '),ಸಂಯುಕ್ತ_ಅಕ್ಷರಗಳು:'ಕ್ಷ ಜ್ಞ'.split(' ')},skill:'ಕನ್ನಡ ಸ್ವರಗಳು, ವ್ಯಂಜನಗಳು ಮತ್ತು ಸಾಮಾನ್ಯ ಸಂಯುಕ್ತಾಕ್ಷರಗಳನ್ನು ಗುರುತಿಸಿ ಬರೆಯುವುದು'},
+ ml:{title:'മലയാളം അക്ഷരമാല',groups:{സ്വരങ്ങൾ:'അ ആ ഇ ഈ ഉ ഊ ഋ എ ഏ ഐ ഒ ഓ ഔ അം അഃ'.split(' '),വ്യഞ്ജനങ്ങൾ:'ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ ണ ത ഥ ദ ധ ന പ ഫ ബ ഭ മ യ ര ല വ ശ ഷ സ ഹ ള ഴ റ'.split(' '),ചില്ലക്ഷരങ്ങൾ:'ൺ ൻ ർ ൽ ൾ ൿ'.split(' '),സംയുക്താക്ഷരങ്ങൾ:'ക്ഷ ജ്ഞ ശ്ര'.split(' ')},skill:'മലയാളം സ്വരങ്ങൾ, വ്യഞ്ജനങ്ങൾ, ചില്ലക്ഷരങ്ങൾ, സാധാരണ സംയുക്താക്ഷരങ്ങൾ എന്നിവ തിരിച്ചറിയുകയും എഴുതുകയും ചെയ്യുക'}
+};
+function alphabetContent(lang){
+  const a=SCRIPT_ALPHABETS[lang]||SCRIPT_ALPHABETS.en;
+  return {title:a.title,groups:a.groups,skill:a.skill};
+}
 const visuals={alphabet:'A B C',numbers:'1 2 3',shapes:'● ▲ ■',colours:'🔴 🔵 🟡',patterns:'▲ ● ▲ ●',animals:'🐘 🐯 🐶',birds:'🐦 🦚 🦜',fruits:'🍎 🍌 🍊',vegetables:'🥕 🍅 🥔','body-parts':'👁️ 👂 ✋',family:'👨‍👩‍👧',food:'🍚 🥛 🥭',vehicles:'🚗 🚌 🚲',school:'🎒 📚 ✏️','community-helpers':'👩‍⚕️ 👨‍🚒 👮',nature:'🌳 ☀️ 💧',festivals:'🎉 🪔 🌸',india:'🇮🇳 🗺️ 🪷',plants:'🌱 🌿 🌻','farm-agriculture':'🌾 🚜 🐄'};
 export const TOPIC_CONTENT=Object.fromEntries(Object.keys(BASE).map(id=>[id,{visual:visuals[id],examples:id==='alphabet'?ALPHABET.en.examples:BASE[id].slice(0,3),skill:id==='alphabet'?ALPHABET.en.skill:BASE[id][3]}]));
 export function contentFor(topicId,lang='en'){
   if(topicId==='alphabet'){
     const a=ALPHABET[lang]||ALPHABET.en;
-    return {visual:visuals[topicId],examples:a.examples,skill:a.skill};
+    const script=alphabetContent(lang);
+    return {visual:visuals[topicId],examples:a.examples,groups:script.groups,title:script.title,skill:script.skill};
   }
   const item=V[lang]?.[topicId]||BASE[topicId];
   if(!item) throw new Error(`Missing source content definition for topic: ${topicId}`);
