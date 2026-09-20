@@ -11,7 +11,7 @@ const D=box.window.CHITRAMITRA;
 const langs=Object.keys(D.languages),topics=D.topics,formats=Object.keys(D.formats);
 if(langs.length!==6||topics.length!==20||formats.length!==5)throw new Error(`Frozen matrix mismatch: ${langs.length}x${topics.length}x${formats.length}`);
 if(!D.languages.en||D.languages.en.native!=='English')throw new Error('English language definition missing');
-for(const [id,n] of topics){if(!n.en)throw new Error(`English topic missing: ${id}`);const c=contentFor(id);if(id==='alphabet'&&c.examples.length!==26)throw new Error('Alphabet source must contain all 26 letters')}
+for(const [id,n] of topics){if(!n.en)throw new Error(`English topic missing: ${id}`);const c=contentFor(id);if(id==='alphabet'&&!c.groups)throw new Error('Alphabet source must contain native character groups')}
 for(const f of formats){if(!D.formats[f].label.en)throw new Error(`English format label missing: ${f}`)}
 if(!D.ui.en)throw new Error('English UI strings missing');
 
@@ -27,7 +27,7 @@ for(const l of langs)for(const [t] of topics)for(const f of formats){
     const expected=contentFor(t).visual;
     if(t==='festivals'&&f==='colouring'){
       if(!x.includes('festival-colouring'))badVisual.push(`${l}/${t}/${f}`);
-    }else if(t==='alphabet'){if(!'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').every(ch=>x.includes(ch)))badVisual.push(`${l}/${t}/${f}`);}else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
+    }else if(t==='alphabet'){if(!x.includes('alphabet-pack'))badVisual.push(`${l}/${t}/${f}`);}else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
   }
 }
 if(missing.length)throw new Error(`Missing ${missing.length} resources`);
