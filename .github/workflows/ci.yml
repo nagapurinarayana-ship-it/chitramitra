@@ -1,4 +1,4 @@
-name: ChitraMitra CI
+name: ChitraMitra Production CI
 
 on:
   push:
@@ -10,23 +10,74 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: chitramitra-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 22
+  PUBLIC_BASE_URL: https://chitramitra.pages.dev
+
 jobs:
-  quality:
+  build-quality-e2e:
+    name: Build, Quality Gate & Production Smoke
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-      - name: Install
+      - name: Install dependencies
         run: npm ci
-      - name: Build
+      - name: Build production site
         run: npm run build
-      - name: Verify
+      - name: Verify frozen content matrix
         run: npm run verify
-      - name: Quality gate
+      - name: Run production quality gate
         run: npm run qa
+      - name: Install Chromium for E2E
+        run: npx playwright install --with-deps chromium
+      - name: Run browser smoke tests
+        run: npm run test:e2e
+        env:
+          CI: true
+      - name: Validate generated artifact
+        run: |
+          test -f index.html
+          test -f sitemap.xml
+          test -f robots.txt
+          test -d resources
+          test -d learn
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: chitramitra-playwright-report-${{ github.sha }}
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: chitramitra-test-diagnostics-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  production-gate:
+    name: Production Gate
+    needs: build-quality-e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Production gate passed
+        run: echo "ChitraMitra production gate passed: build, matrix, quality and browser smoke are green."
