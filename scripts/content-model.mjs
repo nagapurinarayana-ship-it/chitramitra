@@ -46,18 +46,25 @@ const SCRIPT_ALPHABETS={
 };
 function buildAlphabetPractice(lang,groups){
   if(lang==='te'){
-    const consonants=groups['హల్లులు'], signs=['','ా','ి','ీ','ు','ూ','ృ','ె','ే','ై','ొ','ో','ౌ','ం','ః'];
+    const consonants=groups['హల్లులు'], signs=['','ా','ి','ీ','ు','ూ','ృ','ె','ే','ై','ొ','ో','ౌ'];
     groups['గుణింతాలు (క్రమబద్ధమైన అభ్యాసం)']=consonants.map(c=>signs.map(s=>c+s)).flat();
+    groups['అనుస్వార-విసర్గ అభ్యాసం']=consonants.map(c=>['ం','ః'].map(s=>c+s)).flat();
   }else if(lang==='hi'){
-    groups['मात्राएँ']=['ा','ि','ी','ु','ू','ृ','े','ै','ो','ौ','ं','ः','ँ','्'];
+    const consonants=groups['व्यंजन'];
+    const matras=['','ा','ि','ी','ु','ू','ृ','े','ै','ो','ौ','ं','ः','ँ','्'];
+    groups['मात्रा और हलन्त अभ्यास']=consonants.map(c=>matras.map(s=>c+s)).flat();
   }else if(lang==='ta'){
     const bases='க ங ச ஞ ட ண த ந ப ம ய ர ல வ ழ ள ற ன'.split(' ');
     const vowels='அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ'.split(' ');
     groups['உயிர்மெய் சேர்க்கைகள்']=bases.map(b=>vowels.map(v=>b+v)).flat();
   }else if(lang==='kn'){
-    groups['ಸ್ವರಚಿಹ್ನೆಗಳು']='ಾ ಿ ೀ ು ೂ ೃ ೆ ೇ ೈ ೊ ೋ ೌ ಂ ಃ'.split(' ');
+    const consonants=groups['ವ್ಯಂಜನಗಳು'];
+    const signs=['','ಾ','ಿ','ೀ','ು','ೂ','ೃ','ೆ','ೇ','ೈ','ೊ','ೋ','ೌ','ಂ','ಃ'];
+    groups['ಸ್ವರಚಿಹ್ನೆ ಮತ್ತು ಒತ್ತಕ್ಷರ ಅಭ್ಯಾಸ']=consonants.map(c=>signs.map(s=>c+s)).flat();
   }else if(lang==='ml'){
-    groups['സ്വരചിഹ്നങ്ങൾ']='ാ ി ീ ു ൂ ൃ െ േ ൈ ൊ ോ ൌ ം ഃ'.split(' ');
+    const consonants=groups['വ്യഞ്ജനങ്ങൾ'];
+    const signs=['','ാ','ി','ീ','ു','ൂ','ൃ','െ','േ','ൈ','ൊ','ോ','ൗ','ം','ഃ'];
+    groups['സ്വരചിഹ്നവും സംയുക്താക്ഷര-ചിഹ്ന അഭ്യാസവും']=consonants.map(c=>signs.map(s=>c+s)).flat();
   }
   return groups;
 }
