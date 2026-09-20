@@ -44,9 +44,27 @@ const SCRIPT_ALPHABETS={
  kn:{title:'ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ',groups:{ಸ್ವರಗಳು:'ಅ ಆ ಇ ಈ ಉ ಊ ಋ ಎ ಏ ಐ ಒ ಓ ಔ ಅಂ ಅಃ'.split(' '),ವ್ಯಂಜನಗಳು:'ಕ ಖ ಗ ಘ ಙ ಚ ಛ ಜ ಝ ಞ ಟ ಠ ಡ ಢ ಣ ತ ಥ ದ ಧ ನ ಪ ಫ ಬ ಭ ಮ ಯ ರ ಲ ವ ಶ ಷ ಸ ಹ ಳ'.split(' '),ಸಂಯುಕ್ತ_ಅಕ್ಷರಗಳು:'ಕ್ಷ ಜ್ಞ'.split(' ')},skill:'ಕನ್ನಡ ಸ್ವರಗಳು, ವ್ಯಂಜನಗಳು ಮತ್ತು ಸಾಮಾನ್ಯ ಸಂಯುಕ್ತಾಕ್ಷರಗಳನ್ನು ಗುರುತಿಸಿ ಬರೆಯುವುದು'},
  ml:{title:'മലയാളം അക്ഷരമാല',groups:{സ്വരങ്ങൾ:'അ ആ ഇ ഈ ഉ ഊ ഋ എ ഏ ഐ ഒ ഓ ഔ അം അഃ'.split(' '),വ്യഞ്ജനങ്ങൾ:'ക ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ ഢ ണ ത ഥ ദ ധ ന പ ഫ ബ ഭ മ യ ര ല വ ശ ഷ സ ഹ ള ഴ റ'.split(' '),ചില്ലക്ഷരങ്ങൾ:'ൺ ൻ ർ ൽ ൾ ൿ'.split(' '),സംയുക്താക്ഷരങ്ങൾ:'ക്ഷ ജ്ഞ ശ്ര'.split(' ')},skill:'മലയാളം സ്വരങ്ങൾ, വ്യഞ്ജനങ്ങൾ, ചില്ലക്ഷരങ്ങൾ, സാധാരണ സംയുക്താക്ഷരങ്ങൾ എന്നിവ തിരിച്ചറിയുകയും എഴുതുകയും ചെയ്യുക'}
 };
+function buildAlphabetPractice(lang,groups){
+  if(lang==='te'){
+    const consonants=groups['హల్లులు'], signs=['','ా','ి','ీ','ు','ూ','ృ','ె','ే','ై','ొ','ో','ౌ','ం','ః'];
+    groups['గుణింతాలు (క్రమబద్ధమైన అభ్యాసం)']=consonants.map(c=>signs.map(s=>c+s)).flat();
+  }else if(lang==='hi'){
+    groups['मात्राएँ']=['ा','ि','ी','ु','ू','ृ','े','ै','ो','ौ','ं','ः','ँ','्'];
+  }else if(lang==='ta'){
+    const bases='க ங ச ஞ ட ண த ந ப ம ய ர ல வ ழ ள ற ன'.split(' ');
+    const vowels='அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ'.split(' ');
+    groups['உயிர்மெய் சேர்க்கைகள்']=bases.map(b=>vowels.map(v=>b+v)).flat();
+  }else if(lang==='kn'){
+    groups['ಸ್ವರಚಿಹ್ನೆಗಳು']='ಾ ಿ ೀ ು ೂ ೃ ೆ ೇ ೈ ೊ ೋ ೌ ಂ ಃ'.split(' ');
+  }else if(lang==='ml'){
+    groups['സ്വരചിഹ്നങ്ങൾ']='ാ ി ീ ു ൂ ൃ െ േ ൈ ൊ ോ ൌ ം ഃ'.split(' ');
+  }
+  return groups;
+}
 function alphabetContent(lang){
   const a=SCRIPT_ALPHABETS[lang]||SCRIPT_ALPHABETS.en;
-  return {title:a.title,groups:a.groups,skill:a.skill};
+  const groups=buildAlphabetPractice(lang,Object.fromEntries(Object.entries(a.groups).map(([k,v])=>[k,[...v]])));
+  return {title:a.title,groups,skill:a.skill};
 }
 const visuals={alphabet:'A B C',numbers:'1 2 3',shapes:'● ▲ ■',colours:'🔴 🔵 🟡',patterns:'▲ ● ▲ ●',animals:'🐘 🐯 🐶',birds:'🐦 🦚 🦜',fruits:'🍎 🍌 🍊',vegetables:'🥕 🍅 🥔','body-parts':'👁️ 👂 ✋',family:'👨‍👩‍👧',food:'🍚 🥛 🥭',vehicles:'🚗 🚌 🚲',school:'🎒 📚 ✏️','community-helpers':'👩‍⚕️ 👨‍🚒 👮',nature:'🌳 ☀️ 💧',festivals:'🎉 🪔 🌸',india:'🇮🇳 🗺️ 🪷',plants:'🌱 🌿 🌻','farm-agriculture':'🌾 🚜 🐄'};
 export const TOPIC_CONTENT=Object.fromEntries(Object.keys(BASE).map(id=>[id,{visual:visuals[id],examples:id==='alphabet'?ALPHABET.en.examples:BASE[id].slice(0,3),skill:id==='alphabet'?ALPHABET.en.skill:BASE[id][3]}]));
