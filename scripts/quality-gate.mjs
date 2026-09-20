@@ -9,7 +9,7 @@ for(const [t] of D.topics){const c=contentFor(t);must(t==='alphabet'?c.examples.
 const alphabetExpected={en:{letters:26},te:{'అచ్చులు':15,'హల్లులు':null,'ప్రత్యేక_అక్షరాలు':2,'గుణింతాలు (క్రమబద్ధమైన అభ్యాసం)':null,'అనుస్వార-విసర్గ అభ్యాసం':null},hi:{'स्वर':13,'व्यंजन':null,'संयुक्त_अक्षर':4,'मात्रा और हलन्त अभ्यास':null},ta:{'உயிரெழுத்துகள்':12,'மெய்யெழுத்துகள்':18,'ஆய்தம்':1,'உயிர்மெய்':6,'உயிர்மெய் சேர்க்கைகள்':216},kn:{'ಸ್ವರಗಳು':15,'ವ್ಯಂಜನಗಳು':null,'ಸಂಯುಕ್ತ_ಅಕ್ಷರಗಳು':2,'ಸ್ವರಚಿಹ್ನೆ ಮತ್ತು ಒತ್ತಕ್ಷರ ಅಭ್ಯಾಸ':null},ml:{'സ്വരങ്ങൾ':15,'വ്യഞ്ജനങ്ങൾ':null,'ചില്ലക്ഷരങ്ങൾ':6,'സംയುಕ್ತാക്ഷരങ്ങൾ':3,'സ്വരಚിഹ್ನവും സംയുക്താക്ഷര-ചിഹ്ന അഭ്യാസവും':null}};
 for(const l of langs){
   const a=contentFor('alphabet',l);
-  for(const [group,count] of Object.entries(alphabetExpected[l]))if(count!==null)must((a.groups[group]||[]).length===count,\`Alphabet group \${l}/\${group} expected \${count}\`);
+  for(const [group,count] of Object.entries(alphabetExpected[l]))if(count!==null)must((a.groups[group]||[]).length===count,`Alphabet group ${l}/${group} expected ${count}`);
   if(l==='te'){const n=a.groups['హల్లులు'].length;must(a.groups['గుణింతాలు (క్రమబద్ధమైన అభ్యాసం)'].length===n*13,'Telugu gunintalu matrix is incomplete');must(a.groups['అనుస్వార-విసర్గ అభ్యాసం'].length===n*2,'Telugu anusvara-visarga matrix is incomplete')}
   if(l==='hi'){const n=a.groups['व्यंजन'].length;must(a.groups['मात्रा और हलन्त अभ्यास'].length===n*15,'Hindi matra matrix is incomplete')}
   if(l==='kn'){const n=a.groups['ವ್ಯಂಜನಗಳು'].length;must(a.groups['ಸ್ವರಚಿಹ್ನೆ ಮತ್ತು ಒತ್ತಕ್ಷರ ಅಭ್ಯಾಸ'].length===n*15,'Kannada vowel-sign matrix is incomplete')}
