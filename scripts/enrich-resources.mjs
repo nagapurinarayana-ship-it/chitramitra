@@ -49,6 +49,7 @@ walk(ROOT);
 for(const file of files){
   const topic=topicFromFile(file);
   if(!TOPICS.includes(topic)) continue;
+  if(topic==='alphabet') continue;
   let html=fs.readFileSync(file,'utf8');
   if(html.includes('data-enhanced-category')) continue;
   const lang=languageFromFile(file);
