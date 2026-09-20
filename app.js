@@ -15,7 +15,7 @@ function render(){
   return '<a class="home-topic-card" href="learn/'+l+'/'+id+'/"><span class="topic-icon">'+(icons[id]||"✨")+'</span><span class="topic-name">'+name+'</span><span class="topic-meta">'+ageFor+' · Individual activities</span><span class="topic-cta">Explore →</span></a>';
  }).join("")||"<p>No topic matches that search.</p>";
 }
-[lang,age,search].forEach(function(x){x.addEventListener("input",render);x.addEventListener("change",render)});
+[lang,age,search].forEach(function(x){x.addEventListener("input",render);x.addEventListener("change",render)});const searchBtn=document.getElementById("searchBtn");if(searchBtn)searchBtn.addEventListener("click",render);
 const menu=document.getElementById("menu"),nav=document.querySelector(".topbar nav");
 if(menu&&nav){menu.setAttribute("aria-expanded","false");menu.onclick=function(){const open=nav.classList.toggle("open");menu.setAttribute("aria-expanded",String(open))};nav.addEventListener("click",function(){nav.classList.remove("open");menu.setAttribute("aria-expanded","false")})}
 render();
