@@ -24,10 +24,13 @@ for(const l of langs)for(const [t] of topics)for(const f of formats){
     const x=fs.readFileSync(p,'utf8');
     for(const needle of ['<title>','canonical','application/ld+json','window.print'])if(!x.includes(needle))throw new Error(`${p} missing ${needle}`);
     if(x.includes('children ages 3–8'))throw new Error(`${p} has stale age range`);
-    const expected=contentFor(t).visual;
     if(t==='festivals'&&f==='colouring'){
-      if(!x.includes('festival-colouring'))badVisual.push(`${l}/${t}/${f}`);
-    }else if(t==='alphabet'){if(!x.includes('alphabet-pack'))badVisual.push(`${l}/${t}/${f}`);}else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
+      if(!x.includes('festival-colouring'))badVisual.push(l+'/'+t+'/'+f);
+    }else if(t==='alphabet'){
+      if(!x.includes('alphabet-pack'))badVisual.push(l+'/'+t+'/'+f);
+    }else if(!x.includes('data-content-key="'+l+'-'+t+'-'+f+'"')){
+      badVisual.push(l+'/'+t+'/'+f);
+    }
   }
 }
 if(missing.length)throw new Error(`Missing ${missing.length} resources`);
