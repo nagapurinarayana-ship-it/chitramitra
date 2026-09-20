@@ -27,7 +27,7 @@ for(const l of langs)for(const [t] of topics)for(const f of formats){
     const expected=contentFor(t).visual;
     if(t==='festivals'&&f==='colouring'){
       if(!x.includes('festival-colouring'))badVisual.push(`${l}/${t}/${f}`);
-    }else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
+    }else if(t==='alphabet'){if(!'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').every(ch=>x.includes(ch)))badVisual.push(`${l}/${t}/${f}`);}else if(expected&&!x.includes(expected))badVisual.push(`${l}/${t}/${f}`);
   }
 }
 if(missing.length)throw new Error(`Missing ${missing.length} resources`);
