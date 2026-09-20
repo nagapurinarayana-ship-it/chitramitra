@@ -3,7 +3,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { contentFor } from './content-model.mjs';
 
-const root=process.cwd();
+const root=process.cwd();const requiredAssets=['styles.css','learn.css','resource.css','app.js','data.js'];for(const asset of requiredAssets)if(!fs.existsSync(path.join(root,asset)))throw new Error(`Missing production asset: ${asset}`);
 const s=fs.readFileSync(path.join(root,'data.js'),'utf8');
 const box={window:{}};
 vm.runInNewContext(s,box);
