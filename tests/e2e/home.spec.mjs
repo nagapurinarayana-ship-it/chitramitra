@@ -28,6 +28,18 @@ test('homepage controls work', async ({ page }) => {
   await expect(page).toHaveURL(/\/learn\/en\/animals\/$/);
 });
 
+test('format filter opens the selected resource format', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#format').selectOption('worksheet');
+  await expect(page.locator('#count')).toContainText('Worksheet');
+  const animals = page.locator('.home-topic-card').filter({ hasText: 'Animals' });
+  await expect(animals).toHaveCount(1);
+  await expect(animals).toHaveAttribute('href', 'resources/en/animals/worksheet.html');
+  await animals.click();
+  await expect(page).toHaveURL(/\/resources\/en\/animals\/worksheet\.html$/);
+  await expect(page).toHaveTitle(/ChitraMitra/i);
+});
+
 test('mobile menu opens and closes', async ({ page }) => {
   await page.setViewportSize({width:390,height:844});
   await page.goto('/');
