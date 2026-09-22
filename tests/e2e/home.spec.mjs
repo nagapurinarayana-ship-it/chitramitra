@@ -21,7 +21,10 @@ test('homepage controls work', async ({ page }) => {
   await page.locator('#search').fill('');
   await page.locator('#language').selectOption('en');
   await page.locator('#age').selectOption('all');
-  await page.locator('.home-topic-card').filter({ hasText: 'Animals' }).click();
+  const animals = page.locator('.home-topic-card').filter({ hasText: 'Animals' });
+  await expect(animals).toHaveCount(1);
+  await expect(animals).toHaveAttribute('href', 'learn/en/animals/');
+  await animals.evaluate((el) => el.click());
   await expect(page).toHaveURL(/\/learn\/en\/animals\/$/);
 });
 
