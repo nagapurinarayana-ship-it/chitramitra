@@ -102,7 +102,7 @@ jobs:
       - name: Production smoke checks
         run: |
           set -e
-          for url in             "https://chitramitra.pages.dev/"             "https://chitramitra.pages.dev/resources/en/numbers/worksheet.html"             "https://chitramitra.pages.dev/learn/en/numbers/5/"             "https://chitramitra.pages.dev/learn/te/alphabet/item-01/"             "https://chitramitra.pages.dev/sitemap.xml"             "https://chitramitra.pages.dev/robots.txt"             "https://chitramitra.pages.dev/styles.css"             "https://chitramitra.pages.dev/learn.css"             "https://chitramitra.pages.dev/resource.css"; do
+          for url in             "https://chitramitra.pages.dev/"             "https://chitramitra.pages.dev/resources/en/numbers/worksheet.html"             "https://chitramitra.pages.dev/learn/en/numbers/1-one/"             "https://chitramitra.pages.dev/learn/te/alphabet/item-01/"             "https://chitramitra.pages.dev/sitemap.xml"             "https://chitramitra.pages.dev/robots.txt"             "https://chitramitra.pages.dev/styles.css"             "https://chitramitra.pages.dev/learn.css"             "https://chitramitra.pages.dev/resource.css"; do
             echo "Checking $url"
             curl -fsSL --max-time 20 "$url" >/dev/null
           done
