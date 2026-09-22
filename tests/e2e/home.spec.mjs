@@ -3,26 +3,25 @@ import { test, expect } from '@playwright/test';
 test('homepage controls work', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/ChitraMitra/);
-  await expect(page.locator('#grid .resource-card')).toHaveCount(80);
+  await expect(page.locator('.home-topic-card')).toHaveCount(20);
 
   await page.locator('#language').selectOption('te');
-  await expect(page.locator('#topicList a').first()).not.toHaveText('Alphabet');
+  await expect(page.locator('.home-topic-card').first()).toContainText(/తెలుగు|అక్షరమాల|సంఖ్యలు|ఆకారాలు|రంగులు/);
 
   await page.locator('#age').selectOption('3-4');
-  await expect(page.locator('#count')).toContainText('resources');
-
-  await page.locator('button[data-format="worksheet"]').click();
-  await expect(page.locator('button[data-format="worksheet"]')).toHaveClass(/active/);
+  await expect(page.locator('#count')).toContainText('learning topics');
+  await expect(page.locator('.home-topic-card').count()).resolves.toBeGreaterThan(0);
 
   await page.locator('#search').fill('fruits');
   await page.locator('#searchBtn').click();
-  await expect(page.locator('#grid .resource-card')).not.toHaveCount(0);
+  await expect(page.locator('.home-topic-card')).toHaveCount(1);
+  await expect(page.locator('.home-topic-card').first()).toContainText(/పండ్లు|Fruits/);
 
   await page.locator('#search').fill('');
+  await page.locator('#language').selectOption('en');
   await page.locator('#age').selectOption('all');
-  await page.locator('button[data-format="all"]').click();
-  await page.locator('#topicList a[data-topic="animals"]').click();
-  await expect(page.locator('#grid .resource-card')).toHaveCount(5);
+  await page.locator('.home-topic-card').filter({ hasText: 'Animals' }).click();
+  await expect(page).toHaveURL(/\/learn\/en\/animals\/$/);
 });
 
 test('mobile menu opens and closes', async ({ page }) => {
@@ -32,7 +31,7 @@ test('mobile menu opens and closes', async ({ page }) => {
   await menu.click();
   await expect(menu).toHaveAttribute('aria-expanded','true');
   await expect(page.locator('.topbar nav')).toHaveClass(/open/);
-  await page.getByRole('link', {name:'Resources', exact:true}).first().click();
+  await page.getByRole('link', {name:'Reference', exact:true}).click();
   await expect(menu).toHaveAttribute('aria-expanded','false');
 });
 
