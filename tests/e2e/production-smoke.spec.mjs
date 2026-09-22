@@ -49,6 +49,15 @@ test('individual number learning item is printable', async ({ page }) => {
   await expect(page.locator('.learn-print')).toBeVisible();
 });
 
+test('resource print CSS forces A4 and avoids blank trailing pages', async ({ page }) => {
+  await page.goto('/resources/en/animals/worksheet.html');
+  const css = await page.request.get('http://127.0.0.1:4173/resource.css');
+  const text = await css.text();
+  expect(text).toMatch(/@page\{size:A4 portrait;margin:0\}/);
+  expect(text).not.toContain('page-break-after:always');
+  expect(text).toContain('break-after:auto');
+});
+
 test('reference resource exposes item-level printing', async ({ page }) => {
   await page.goto('/resources/en/numbers/worksheet.html');
   await expect(page.locator('.item-print-panel')).toBeVisible();
