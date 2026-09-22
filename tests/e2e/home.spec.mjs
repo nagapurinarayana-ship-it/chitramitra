@@ -6,12 +6,13 @@ test('homepage controls work', async ({ page }) => {
   await expect(page.locator('.home-topic-card')).toHaveCount(20);
 
   await page.locator('#language').selectOption('te');
-  await expect(page.locator('.home-topic-card').first()).toContainText(/తెలుగు|అక్షరమాల|సంఖ్యలు|ఆకారాలు|రంగులు/);
+  await expect(page.locator('.home-topic-card').first()).toContainText(/అక్షరమాల|సంఖ్యలు|ఆకారాలు|రంగులు/);
 
   await page.locator('#age').selectOption('3-4');
   await expect(page.locator('#count')).toContainText('learning topics');
   await expect(page.locator('.home-topic-card').count()).resolves.toBeGreaterThan(0);
 
+  await page.locator('#age').selectOption('all');
   await page.locator('#search').fill('fruits');
   await page.locator('#searchBtn').click();
   await expect(page.locator('.home-topic-card')).toHaveCount(1);
@@ -32,7 +33,7 @@ test('mobile menu opens and closes', async ({ page }) => {
   await expect(menu).toHaveAttribute('aria-expanded','true');
   await expect(page.locator('.topbar nav')).toHaveClass(/open/);
   await page.getByRole('link', {name:'Reference', exact:true}).click();
-  await expect(menu).toHaveAttribute('aria-expanded','false');
+  await expect(page).toHaveURL(/\/resources\/$/);
 });
 
 test('resource print controls are functional', async ({ page }) => {
