@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const numberItem = '/learn/en/numbers/3-wheels/';
+const numberItem = '/learn/en/numbers/1-one/';
 const teluguItem = '/learn/te/alphabet/item-01/';
 
 test('global stylesheets load on homepage', async ({ page }) => {
