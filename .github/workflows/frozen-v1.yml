@@ -40,6 +40,9 @@ jobs:
       - name: Install test tooling
         run: npm install --no-audit --no-fund
 
+      - name: Install Indic font fallback
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-core fonts-noto-extra
+
       - name: Install Chromium for browser QA
         run: npx playwright install --with-deps chromium
 
@@ -51,6 +54,7 @@ jobs:
           rc=0
           echo '=== BUILD ==='
           npm run build || rc=1
+          npm run generate:pdf || rc=1
           echo '=== VERIFY ==='
           npm run verify || rc=1
           echo '=== QUALITY GATE ==='
@@ -72,6 +76,7 @@ jobs:
         run: |
           set -euo pipefail
           npm run build
+          npm run generate:pdf
           npm run verify
           npm run qa
 

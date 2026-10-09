@@ -8,7 +8,8 @@
     "verify": "node scripts/verify.mjs",
     "qa": "node scripts/quality-gate.mjs",
     "repair": "node scripts/repair.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "generate:pdf": "node scripts/generate-pdfs.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0"
