@@ -71,3 +71,17 @@ test('resource print action remains functional beside direct download', async ({
   expect(prints).toBe(1);
   await expect(page.locator('.print-sheet')).toBeVisible();
 });
+
+
+test('colouring print sheets contain real outline artwork and large outlined alphabet letters', async ({ page }) => {
+  await page.goto('/resources/en/animals/colouring.html');
+  const illustration=page.locator('.print-sheet .enhanced-art[data-enhanced-art="animals"] svg');
+  await expect(illustration).toHaveCount(1);
+  await expect(illustration).toBeVisible();
+
+  await page.goto('/resources/en/alphabet/colouring.html');
+  const letters=page.locator('.print-sheet .alphabet-pack .colour-letter');
+  await expect(letters).toHaveCount(26);
+  const stroke=await letters.first().locator('b').evaluate(element=>getComputedStyle(element).webkitTextStrokeWidth);
+  expect(parseFloat(stroke)).toBeGreaterThan(0);
+});

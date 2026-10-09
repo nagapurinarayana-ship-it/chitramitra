@@ -20,3 +20,20 @@
 .actions .download-pdf{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#ffd34d;color:#182018;border:0;border-radius:999px;padding:12px 18px;font-weight:900}
 @media(max-width:760px){.resource-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.resource-collection-card{padding:14px;min-height:200px}.resource-collection-card h2{font-size:20px}}
 @media(max-width:450px){.resource-collection-grid{grid-template-columns:1fr}.resource-collection-card{min-height:0}.resource-collection-actions{gap:10px}}
+
+/* Direct-to-paper line art and large, outlined alphabet cards. */
+.colouring.has-enhanced-art>.outline,
+.colouring.has-enhanced-art .colour-card .outline{display:none!important}
+.enhanced-art{margin:12px 0;padding:8px;border:1px solid currentColor;border-radius:10px;break-inside:avoid;page-break-inside:avoid}
+.enhanced-art svg{display:block;width:100%;height:auto;max-height:270px}
+.alphabet-pack[data-content-key$="-colouring"] .alphabet-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5mm;margin-top:5mm}
+.alphabet-pack[data-content-key$="-colouring"] .alphabet-grid article{min-height:34mm;display:flex;align-items:center;justify-content:center;text-align:center;padding:4mm;background:#fff;break-inside:avoid;page-break-inside:avoid}
+.alphabet-pack[data-content-key$="-colouring"] .alphabet-grid article b{font-size:62pt;line-height:1;color:#fff;-webkit-text-fill-color:#fff;-webkit-text-stroke:1.4px #111;font-weight:800}
+.alphabet-pack[data-content-key$="-colouring"] .alphabet-grid article span{font-size:10pt;line-height:1.2;font-weight:700;color:#222}
+@media print{
+ .enhanced-art{border:0;border-radius:0;padding:0;margin:5mm 0;max-height:78mm}
+ .enhanced-art svg{max-height:75mm}
+ .alphabet-pack[data-content-key$="-colouring"] .alphabet-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5mm}
+ .alphabet-pack[data-content-key$="-colouring"] .alphabet-grid article{min-height:34mm;padding:4mm;border:1px solid #333}
+ .alphabet-pack[data-content-key$="-colouring"] .alphabet-grid article b{font-size:62pt;-webkit-text-stroke:1.4px #111}
+}

@@ -54,7 +54,7 @@ function card(topic,language,format){
  const preview='/resources/'+language+'/'+id+'/'+fmt+'.html';
  const collection='/resources/'+language+'/'+id+'/';
  const icon=ICONS[id]||'✎';
- return '<article class="home-topic-card" data-topic="'+id+'"><div class="topic-card-top"><span class="topic-icon" aria-hidden="true">'+icon+'</span><span class="topic-format">'+formatName(fmt,language)+'</span></div><h3 class="topic-name">'+name+'</h3><p class="topic-meta">A4 PDF · Free</p><div class="topic-actions"><a class="direct-download" href="'+pdf+'" download="'+id+'-'+fmt+'-a4.pdf">↓ Download A4 PDF</a><div class="topic-secondary"><a class="preview-link" href="'+preview+'">Preview</a><a class="all-formats" href="'+collection+'">All printables</a></div></div></article>';
+ return '<article class="home-topic-card" data-topic="'+id+'"><div class="topic-card-top"><span class="topic-icon" aria-hidden="true">'+icon+'</span><span class="topic-format">'+formatName(fmt,language)+'</span></div><h3 class="topic-name">'+name+'</h3><p class="topic-meta">A4 PDF · Free</p><div class="topic-actions"><a class="direct-download" href="'+pdf+'" download="'+language+'-'+id+'-'+fmt+'-a4.pdf">↓ Download A4 PDF</a><div class="topic-secondary"><a class="preview-link" href="'+preview+'">Preview</a><a class="all-formats" href="'+collection+'">All printables</a></div></div></article>';
 }
 function render(){
  const raw=search.value.trim(),format=detectFormat(raw),inferred=detectLanguage(raw);
