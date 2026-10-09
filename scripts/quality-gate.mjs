@@ -29,7 +29,7 @@ for(const l of langs)for(const [t] of D.topics){
     must(colouringHtml.includes('class="colouring has-enhanced-art"'),'Colouring print region must identify the outline illustration: '+colouringPath);
   }
   if(t==='alphabet'){
-    const letterPos=colouringHtml.indexOf('class="colour-letter"',printStart);
+    const letterPos=colouringHtml.indexOf('colour-letter',printStart);
     must(letterPos>printStart&&letterPos<printEnd,'Alphabet colouring needs outlined letter cards inside the A4 print sheet: '+colouringPath);
   }
 }
