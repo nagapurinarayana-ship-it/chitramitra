@@ -60,11 +60,13 @@ test('resource print CSS forces A4 and avoids blank trailing pages', async ({ pa
   expect(text).toContain('break-after:auto');
 });
 
-test('reference resource exposes item-level printing', async ({ page }) => {
+test('resource preview has one clear print action and a direct PDF download', async ({ page }) => {
   await page.goto('/resources/en/numbers/worksheet.html');
-  await expect(page.locator('.item-print-panel')).toBeVisible();
-  await expect(page.locator('.item-print').first()).toBeVisible();
+  await expect(page.locator('.actions .download-pdf')).toHaveAttribute('href','/resources/en/numbers/worksheet.pdf');
+  await expect(page.locator('.actions button')).toHaveCount(1);
   await expect(page.locator('.print-sheet')).toBeVisible();
+  await expect(page.locator('.item-print-panel')).toHaveCount(0);
+  await expect(page.locator('.item-print')).toHaveCount(0);
 });
 
 test('mobile layout exposes the same core learning controls', async ({ page }) => {
