@@ -15,12 +15,14 @@ test('global stylesheets load on homepage', async ({ page }) => {
   expect(bg).not.toBe('rgba(0, 0, 0, 0)');
 });
 
-test('homepage exposes child-first discovery', async ({ page }) => {
+test('homepage exposes direct A4 printable discovery without required filters', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/ChitraMitra/i);
+  await expect(page).toHaveTitle(/Free A4 Printables/i);
   await expect(page.locator('#language')).toBeVisible();
-  await expect(page.locator('#age')).toBeVisible();
   await expect(page.locator('#search')).toBeVisible();
+  await expect(page.locator('.direct-download').first()).toBeVisible();
+  await expect(page.locator('#age')).toHaveCount(0);
+  await expect(page.locator('#format')).toHaveCount(0);
 });
 
 test('individual learning page stylesheets load', async ({ page }) => {
@@ -80,10 +82,27 @@ test('homepage remains usable without JavaScript', async ({ browser }) => {
   await context.close();
 });
 
-test('homepage Find button filters topics', async ({ page }) => {
+test('homepage search filters by topic and keeps direct download available', async ({ page }) => {
   await page.goto('/');
   await page.locator('#search').fill('animals');
-  await page.locator('#searchBtn').click();
+  await page.getByRole('button', {name:'Search printables'}).click();
   await expect(page.locator('.home-topic-card')).toHaveCount(1);
   await expect(page.locator('.home-topic-card').first()).toContainText('Animals');
+  await expect(page.locator('.direct-download').first()).toHaveAttribute('href','/resources/en/animals/colouring.pdf');
+});
+
+
+test('generated A4 PDF downloads are served as PDF bytes', async ({ request }) => {
+  for (const url of ['/resources/en/alphabet/colouring.pdf','/resources/te/alphabet/colouring.pdf','/resources/hi/numbers/worksheet.pdf']) {
+    const response=await request.get(url);
+    expect(response.ok(),url).toBeTruthy();
+    expect((await response.body()).subarray(0,5).toString('ascii'),url).toBe('%PDF-');
+  }
+});
+
+test('topic collection has direct downloads for all five formats', async ({ page }) => {
+  await page.goto('/resources/te/alphabet/');
+  await expect(page).toHaveTitle(/അക്ഷരമാല Printables|ChitraMitra|Printables/i);
+  await expect(page.locator('.resource-collection-card')).toHaveCount(5);
+  await expect(page.locator('.resource-collection-card .download-pdf')).toHaveCount(5);
 });
