@@ -37,13 +37,14 @@ const FORMAT_TERMS={
  tracing:['tracing','trace','handwriting','writing practice','writing sheet','write letters','ట్రేసింగ్','రాయడం','लिखावट','लेखन अभ्यास','எழுத்துப் பயிற்சி','ಬರೆಯುವ ಅಭ್ಯಾಸ','കൈയെഴുത്ത്'],
  flashcard:['flashcard','flashcards','flash card','flash cards','ఫ్లాష్‌కార్డ్','फ्लैशकार्ड','ஃப்ளாஷ்கார்டு','ಫ್ಲ್ಯಾಶ್‌ಕಾರ್ಡ್','ഫ്ലാഷ്‌കാർഡ്']
 };
-const LANGUAGE_TERMS={en:['english'],te:['telugu','తెలుగు'],hi:['hindi','हिंदी','हिन्दी'],ta:['tamil','தமிழ்'],kn:['kannada','ಕನ್ನಡ'],ml:['malayalam','മലയാളം']};
+const LANGUAGE_TERMS={en:['english'],te:['telugu','తెలుగు','aksharamala','aksharalu'],hi:['hindi','हिंदी','हिन्दी','varnamala','देवनागरी'],ta:['tamil','தமிழ்'],kn:['kannada','ಕನ್ನಡ','aksharamale'],ml:['malayalam','മലയാളം']};
+const SCRIPT_LANGUAGES=[['te',3072,3199],['hi',2304,2431],['ta',2944,3071],['kn',3200,3327],['ml',3328,3455]];
 const NOISE=['print','printable','printables','download','pdf','a4','free','for','kids','kid','children','child','in','the','and','please','sheet','page','pages','to','with','be','s'];
 const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
 const allTerms=Object.values(FORMAT_TERMS).flat().concat(Object.values(LANGUAGE_TERMS).flat(),NOISE);
 function termInQuery(query,term){const q=' '+normalize(query)+' ',t=' '+normalize(term)+' ';return !!normalize(term)&&q.includes(t)}
 function detectFormat(query){for(const format of Object.keys(FORMAT_TERMS)){if(FORMAT_TERMS[format].some(term=>termInQuery(query,term)))return format;for(const l of Object.keys(D.languages)){if(termInQuery(query,D.formats[format].label[l]))return format}}return null}
-function detectLanguage(query){for(const l of Object.keys(LANGUAGE_TERMS)){if(LANGUAGE_TERMS[l].some(term=>termInQuery(query,term)))return l}for(const l of Object.keys(D.languages)){if(termInQuery(query,D.languages[l].native)||termInQuery(query,D.languages[l].name))return l}return null}
+function detectLanguage(query){for(const l of Object.keys(LANGUAGE_TERMS)){if(LANGUAGE_TERMS[l].some(term=>termInQuery(query,term)))return l}for(const l of Object.keys(D.languages)){if(termInQuery(query,D.languages[l].native)||termInQuery(query,D.languages[l].name))return l}for(const character of query){const point=character.codePointAt(0);for(const [language,start,end] of SCRIPT_LANGUAGES)if(point>=start&&point<=end)return language}return null}
 function cleanQuery(query){let out=' '+normalize(query)+' ';const terms=allTerms.concat(Object.values(D.formats).flatMap(x=>Object.values(x.label)));terms.sort((a,b)=>normalize(b).length-normalize(a).length);for(const term of terms){const n=normalize(term);if(n)out=out.split(' '+n+' ').join(' ')}return out.trim()}
 function matchesTopic(topic,q){if(!q)return true;const id=topic[0],names=Object.values(topic[1]);const corpus=normalize([id,...names,...(TOPIC_TERMS[id]||[])].join(' '));if(corpus.includes(q))return true;if(id==='alphabet'&&/^(a b c|a b c s|abc|abcs|a z|a to z)$/.test(q))return true;const qTokens=q.split(' ').filter(Boolean);return qTokens.length>0&&qTokens.every(token=>corpus.split(' ').includes(token))}
 function formatName(format,language){return D.formats[format]?.label?.[language]||D.formats[format]?.en||format}
