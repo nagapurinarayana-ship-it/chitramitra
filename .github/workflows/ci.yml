@@ -35,14 +35,16 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Install Chromium for PDFs and browser QA
+        run: npx playwright install --with-deps chromium
       - name: Build production site
         run: npm run build
-      - name: Verify frozen content matrix
+      - name: Generate real A4 PDF resources
+        run: npm run generate:pdf
+      - name: Verify frozen content matrix and generated PDFs
         run: npm run verify
       - name: Run production quality gate
         run: npm run qa
-      - name: Install Chromium for E2E
-        run: npx playwright install --with-deps chromium
       - name: Run browser smoke tests
         run: npm run test:e2e
         env:
@@ -55,6 +57,8 @@ jobs:
           test -d resources
           test -d learn
           test -f health.txt
+          test -f resources/en/alphabet/colouring.pdf
+          test -f resources/te/alphabet/colouring.pdf
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v6
