@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 const MAX_PASSES = 2;
 const commands = [
   ['build', ['run', 'build']],
+  ['generate PDFs', ['run', 'generate:pdf']],
   ['verify', ['run', 'verify']],
   ['qa', ['run', 'qa']],
 ];
