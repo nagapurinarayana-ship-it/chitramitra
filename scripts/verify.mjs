@@ -39,6 +39,25 @@ for(const l of langs) for(const [t] of topics) for(const f of formats){
 if(missing.length) throw new Error(`Missing ${missing.length} resources`);
 if(badVisual.length) throw new Error(`Topic content mismatch in ${badVisual.length} resources; first: ${badVisual.slice(0,5).join(', ')}`);
 
+let verifiedPdfs=0,collectionPages=0;
+for(const l of langs)for(const [t] of topics){
+  const collection=path.join(root,'resources',l,t,'index.html');
+  if(!fs.existsSync(collection)) throw new Error(`Missing printable collection page: ${l}/${t}`);
+  const collectionHtml=fs.readFileSync(collection,'utf8');
+  if(!collectionHtml.includes(`<html lang="${l}">`)) throw new Error(`Wrong collection language: ${l}/${t}`);
+  for(const f of formats){
+    if(!collectionHtml.includes(`href="/resources/${l}/${t}/${f}.pdf"`)) throw new Error(`Collection download missing: ${l}/${t}/${f}.pdf`);
+    const pdfPath=path.join(root,'resources',l,t,`${f}.pdf`);
+    if(!fs.existsSync(pdfPath)) throw new Error(`Missing generated PDF: ${pdfPath}`);
+    const pdf=fs.readFileSync(pdfPath);
+    if(pdf.subarray(0,5).toString('ascii')!=='%PDF-') throw new Error(`Invalid PDF signature: ${pdfPath}`);
+    if(pdf.length<700) throw new Error(`PDF is unexpectedly small: ${pdfPath}`);
+    verifiedPdfs++;
+  }
+  collectionPages++;
+}
+if(collectionPages!==120||verifiedPdfs!==600) throw new Error(`Printable coverage mismatch: ${collectionPages} collections and ${verifiedPdfs} PDFs`);
+
 const learnRoot=path.join(root,'learn');
 if(!fs.existsSync(learnRoot)) throw new Error('Individual learning pages directory missing');
 let topicPages=0,itemPages=0;
