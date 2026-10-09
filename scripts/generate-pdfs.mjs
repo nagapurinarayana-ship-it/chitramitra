@@ -9,7 +9,7 @@ const box={window:{}};
 vm.runInNewContext(fs.readFileSync(path.join(ROOT,'data.js'),'utf8'),box);
 const D=box.window.CHITRAMITRA;
 const languages=Object.keys(D.languages),topics=D.topics.map(([id])=>id),formats=Object.keys(D.formats);
-const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon'};
+const mime={'.html':'text/html; charset=utf-8','.pdf':'application/pdf','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.ico':'image/x-icon'};
 const server=http.createServer((req,res)=>{
   try{
     const pathname=decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname);
