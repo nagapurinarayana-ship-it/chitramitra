@@ -43,8 +43,10 @@ try{
         await page.evaluate(()=>document.fonts?document.fonts.ready.then(()=>true):true);
         const sheet=page.locator('section.print-sheet[aria-label="Printable learning resource"]');
         if(await sheet.count()!==1)throw new Error('Printable sheet is missing or duplicated: '+relative);
-        const printableCount=await page.locator('.print-sheet .printable-item').count();
-        if(printableCount===0)throw new Error('Printable sheet has no resource items: '+relative);
+        const contentBlocks=await sheet.locator('[data-content-key]').count();
+        if(contentBlocks===0)throw new Error('Printable sheet has no identified resource content: '+relative);
+        const visibleContent=await sheet.innerText();
+        if(!visibleContent.trim())throw new Error('Printable sheet has no visible content: '+relative);
         const title=await page.title();
         if(!title||!title.includes('ChitraMitra'))throw new Error('Invalid resource title: '+relative);
         await page.emulateMedia({media:'print'});
