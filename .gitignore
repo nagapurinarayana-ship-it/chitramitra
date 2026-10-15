@@ -1,0 +1,23 @@
+# Dependencies and generated tooling
+node_modules/
+**/node_modules/
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+dist/
+build/
+
+# Python and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local-only configuration and OS/editor files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
