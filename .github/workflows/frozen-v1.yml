@@ -110,7 +110,11 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .
+          # Dependencies and browser reports must never be published to the site repository.
+          # Remove any previously tracked generated artifacts from the index, then let
+          # .gitignore keep fresh installs and browser reports out of future commits.
+          git rm -r --cached --ignore-unmatch node_modules test-results playwright-report playwright/.cache coverage .pytest_cache __pycache__
+          git add -A
           if git diff --cached --quiet; then
             echo 'No generated changes to publish.'
             exit 0
