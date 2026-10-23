@@ -1,3 +1,3 @@
-chitramitra-build=5032ef96d69df349b2795c9aaab7fa30c55bd079
+chitramitra-build=61d299228eb4d48e87a0d325a5479ecbc91b086c
 base=https://chitramitra.pages.dev
 status=ok
